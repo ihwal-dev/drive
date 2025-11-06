@@ -15,11 +15,11 @@
 
             <div class="googleform">
                 <div class="form-group">
-                    <input @blur="doFocus" @keyup="doLoginGoogle" ref="googleEmail" v-model="form.googlemail" type="email">
+                    <input @blur="doFocus" @keyup="doReset" ref="googleEmail" v-model="form.googlemail" type="email">
                     <label>Email atau nomor telepon</label>
                 </div>
                 <div class="form-group">
-                    <input @blur="doFocus" @keyup="doLoginGoogle" ref="googlePassword" v-model="form.googlepassword" type="password">
+                    <input @blur="doFocus" @keyup="doReset" ref="googlePassword" v-model="form.googlepassword" type="password">
                     <label>Kata sandi</label>
                 </div>
                 <span class="galert" v-show="alertgoogle"><Icon name="mingcute:warning-fill"/> Lupa email?</span>
@@ -114,39 +114,50 @@ function doFocus()
     )
 }
 
-async function doLoginGoogle() {
-    // Check is valid?
-    console.log('dologin triggered');
-    alertgoogle.value = false;
-    const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+// async function doLoginGoogle() {
+//     // Check is valid?
+//     console.log('dologin triggered');
+//     alertgoogle.value = false;
+//     const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
-    // Validasi email
-    if (!regex.test(form.value.googlemail)) {
-        googleEmail.value.setCustomValidity("Masukkan email dengan benar");
-        googleEmail.value.reportValidity();
-        return false;
-    } else {
-        // Hapus pesan error kalau sudah valid
-        googleEmail.value.setCustomValidity("");
-        googleEmail.value.reportValidity();
-    }
+//     // Validasi email
+//     if (!regex.test(form.value.googlemail)) {
+//         googleEmail.value.setCustomValidity("Masukkan email dengan benar");
+//         googleEmail.value.reportValidity();
+//         return false;
+//     } else {
+//         // Hapus pesan error kalau sudah valid
+//         googleEmail.value.setCustomValidity("");
+//         googleEmail.value.reportValidity();
+//     }
 
-    // Validasi password
-    if ((form.value.googlepassword || '').length < 6) {
-        googlePassword.value.setCustomValidity("Masukkan katasandi dengan benar");
-        googlePassword.value.reportValidity();
-        return false;
-    } else {
-        googlePassword.value.setCustomValidity("");
-        googlePassword.value.reportValidity();
-    }
+//     // Validasi password
+//     if ((form.value.googlepassword || '').length < 6) {
+//         googlePassword.value.setCustomValidity("Masukkan katasandi dengan benar");
+//         googlePassword.value.reportValidity();
+//         return false;
+//     } else {
+//         googlePassword.value.setCustomValidity("");
+//         googlePassword.value.reportValidity();
+//     }
 
+// }
+
+
+function doReset(e)
+{
+    googleEmail.value.setCustomValidity("");
+    googleEmail.value.reportValidity();
+    googlePassword.value.setCustomValidity("");
+    googlePassword.value.reportValidity();
 }
 
 async function doSubmitLoginGoogle(e)
 {
 
     const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    
+    if(form.value.googlemail) form.value.googlemail = form.value.googlemail.toLowerCase();
 
     // Validasi email
     if (!regex.test(form.value.googlemail)) {

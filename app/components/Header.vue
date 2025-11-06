@@ -9,7 +9,7 @@
             <i class="bi bi-download"></i>
             <i class="bi bi-three-dots-vertical"></i>
             <div class="imgprofile">
-                <img src="https://i.sstatic.net/34AD2.jpg" alt="" srcset="">
+                <img src="https://freepngimg.com/save/66726-customer-account-google-service-button-search-logo/512x512" alt="" srcset="">
             </div>
         </div>
     </div>
